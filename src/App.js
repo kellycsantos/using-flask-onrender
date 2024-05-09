@@ -1,23 +1,47 @@
-import logo from './logo.svg';
 import './App.css';
 
+import { useState, useEffect } from 'react';
+
+
 function App() {
+  const [dados, setDados] = useState([])
+  function getDados() {
+    fetch('https://teste-api-flask-5agr.onrender.com/dados')
+      .then(response => response.json())
+      .then(res => {
+        console.log(res)
+        setDados([res])
+      })
+  }
+
+  useEffect(() => {
+    getDados()
+  }, [])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <button onClick={getDados}>`Pegando dados</button>
+
+
+   
+      
+
+      {
+        dados.length === 0 ? <h1>Carregando...</h1> :
+
+        
+          dados.map((dado, n) =>
+            <div key={n}>
+              <p><strong>Nome:</strong> {dado.nome}</p>
+              <p><strong>Apelido:</strong> {dado.apelido}</p>
+              <p><strong>Pais:</strong> {dado.pais}</p>
+              <p><strong>Sexo:</strong>{dado.sexo}</p>
+              <p><strong>Conjugue:</strong> {dado.conjugue}</p>
+            </div>
+            
+          )
+        
+      } 
     </div>
   );
 }
